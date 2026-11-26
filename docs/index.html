@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledger — double-entry, no bank connection, ever</title>
+<meta name="description" content="Real double-entry bookkeeping on this device. A transaction that does not balance cannot be saved, and nothing ever connects to a bank.">
+<meta name="theme-color" content="#101418">
+<style>
+  :root{--bg:#f6f5f2;--panel:#fff;--ink:#14181d;--muted:#5d666f;--line:#d9d6cf;--accent:#2f6b5f}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+  main{max-width:780px;margin:0 auto;padding:48px 20px 64px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:0 0 10px}
+  .lede{font-size:18px;color:var(--muted);margin:0 0 26px}
+  .cta{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 20px;border-radius:9px}
+  .status{margin:26px 0;padding:14px 16px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:9px;background:var(--panel);font-size:14px}
+  .status b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+  h2{font-size:17px;margin:30px 0 8px}
+  ul{padding-left:20px}li{margin:4px 0}
+  code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px;background:#eeede9;padding:1px 5px;border-radius:4px}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
+  th,td{text-align:left;border-bottom:1px solid var(--line);padding:7px 8px;vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+  a{color:var(--accent)}
+  .note{margin:22px 0 0;padding:12px 14px;border:1px solid #c9ded8;border-left:4px solid var(--accent);border-radius:9px;background:#f1f8f6;color:#1d4a41;font-size:13.5px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Ledger</h1>
+  <p class="lede">Real double-entry bookkeeping, on this device. A transaction that does not balance <strong>cannot be saved</strong>, and
+  nothing ever connects to a bank.</p>
+
+  <a class="cta" href="play/index.html">Open Ledger</a>
+
+  <p class="note">Every amount is an integer number of paise. “Reduces net worth by exactly ₹1,000” is a claim floating point cannot keep —
+  so it does not use floating point.</p>
+
+  <div class="status">
+    <b>Status</b>
+    Built and working offline: accounts of five types; transactions posted as debits and credits that must balance; a balance sheet whose
+    totals agree with the sum of its own rows; an income/expense report whose net is income minus expense; budgets and repeat rules
+    evaluated on device, with nothing posted by itself; and a full JSON export that re-imports with identical totals.
+    <br><b>Release</b>: Windows EXE, Android APK and Linux binary, built from this source in CI — <a href="https://github.com/drsamonline/app-ledger/releases/tag/app-latest">app-latest</a>.
+    <br><b>Not built</b>: reading a receipt photo. There is no OCR in this estate, so entries are typed — and the app says so rather than
+    shipping a camera button that does nothing.
+  </div>
+
+  <h2>What it does</h2>
+  <ul>
+    <li>Posts proper double-entry transactions: debits equal credits, or nothing is saved.</li>
+    <li>Computes net worth as assets minus liabilities, from the ledger — never stored, always derived.</li>
+    <li>Reports a balance sheet and an income/expense statement, each checked against its own rows.</li>
+    <li>Keeps budgets and repeat rules, evaluated on device; a repeat is listed when due, never posted by itself.</li>
+    <li>Exports the whole ledger to a JSON file you own, and imports it back with identical totals.</li>
+  </ul>
+
+  <h2>What it will not do</h2>
+  <ul>
+    <li><strong>Connect to a bank.</strong> There is no network code in the app at all — no <code>fetch</code>, no endpoint, CSP <code>connect-src 'none'</code>.</li>
+    <li><strong>Save a transaction that does not balance.</strong> Both totals are shown instead.</li>
+    <li><strong>Date an entry for you.</strong> No date is refused rather than dated today.</li>
+    <li><strong>Merge duplicates.</strong> Two identical entries are both kept and flagged — merging would be a lie about the money.</li>
+    <li><strong>Rebuild an unreadable ledger.</strong> A wrong balance is worse than no balance.</li>
+    <li><strong>Post a repeat by itself.</strong> A ledger that posts by itself is a ledger you cannot trust.</li>
+  </ul>
+
+  <h2>When things go wrong</h2>
+  <table>
+    <tr><th>Case</th><th>What happens</th></tr>
+    <tr><td>Bad input</td><td>No amount, an unparseable amount, no date, an impossible date, a zero amount, an unknown account — each refused, with the value shown.</td></tr>
+    <tr><td>No network</td><td>Nothing changes, and that is the point: there are no bank connections, ever.</td></tr>
+    <tr><td>Storage full or unavailable</td><td>The entry is not saved and the app says the balance does not include it.</td></tr>
+    <tr><td>Corrupt saved state</td><td>Reported and offered for export; never rebuilt from a partial read.</td></tr>
+  </table>
+
+  <h2>How to run it</h2>
+  <ul>
+    <li><strong>Here</strong>: <a href="play/index.html">play/index.html</a>, or install it from your browser's menu.</li>
+    <li><strong>Offline file</strong>: open <code>docs/play/index.html</code> straight from disk.</li>
+    <li><strong>Tests</strong>: <code>node tests/self-tests.js</code> — the spec's countable done-means is asserted there, to the paisa.</li>
+  </ul>
+
+  <footer>
+    PolyForm Noncommercial 1.0.0 · (c) 2026 Dr Sohil Momin ·
+    <a href="https://github.com/drsamonline/app-ledger">source</a>
+  </footer>
+</main>
+</body>
+</html>
