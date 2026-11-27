@@ -1,92 +1,71 @@
 <!DOCTYPE html>
 <html lang="en-IN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ledger — double-entry, no bank connection, ever</title>
-<meta name="description" content="Real double-entry bookkeeping on this device. A transaction that does not balance cannot be saved, and nothing ever connects to a bank.">
-<meta name="theme-color" content="#101418">
+<meta name="description" content="Real double-entry bookkeeping on this device. A transaction that does not balance cannot be saved.">
+<meta name="theme-color" content="#fbf9f3">
 <style>
-  :root{--bg:#f6f5f2;--panel:#fff;--ink:#14181d;--muted:#5d666f;--line:#d9d6cf;--accent:#2f6b5f}
+  :root{--paper:#fbf9f3;--ink:#1d2a24;--green:#3d6b4f;--rule:#bcd3c2;--red:#a8443a;--mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
-  main{max-width:780px;margin:0 auto;padding:48px 20px 64px}
-  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:0 0 10px}
-  .lede{font-size:18px;color:var(--muted);margin:0 0 26px}
-  .cta{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 20px;border-radius:9px}
-  .status{margin:26px 0;padding:14px 16px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:9px;background:var(--panel);font-size:14px}
-  .status b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
-  h2{font-size:17px;margin:30px 0 8px}
-  ul{padding-left:20px}li{margin:4px 0}
-  code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px;background:#eeede9;padding:1px 5px;border-radius:4px}
-  table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
-  th,td{text-align:left;border-bottom:1px solid var(--line);padding:7px 8px;vertical-align:top}
-  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
-  a{color:var(--accent)}
-  .note{margin:22px 0 0;padding:12px 14px;border:1px solid #c9ded8;border-left:4px solid var(--accent);border-radius:9px;background:#f1f8f6;color:#1d4a41;font-size:13.5px}
-</style>
-</head>
-<body>
-<main>
-  <h1>Ledger</h1>
-  <p class="lede">Real double-entry bookkeeping, on this device. A transaction that does not balance <strong>cannot be saved</strong>, and
-  nothing ever connects to a bank.</p>
-
-  <a class="cta" href="play/index.html">Open Ledger</a>
-
-  <p class="note">Every amount is an integer number of paise. “Reduces net worth by exactly ₹1,000” is a claim floating point cannot keep —
-  so it does not use floating point.</p>
-
-  <div class="status">
-    <b>Status</b>
-    Built and working offline: accounts of five types; transactions posted as debits and credits that must balance; a balance sheet whose
-    totals agree with the sum of its own rows; an income/expense report whose net is income minus expense; budgets and repeat rules
-    evaluated on device, with nothing posted by itself; and a full JSON export that re-imports with identical totals.
-    <br><b>Release</b>: Windows EXE, Android APK and Linux binary, built from this source in CI — <a href="https://github.com/drsamonline/app-ledger/releases/tag/app-latest">app-latest</a>.
-    <br><b>Not built</b>: reading a receipt photo. There is no OCR in this estate, so entries are typed — and the app says so rather than
-    shipping a camera button that does nothing.
+  body{margin:0;background:#e7e3d6;color:var(--ink);font-family:var(--mono);font-size:13.5px}
+  .book{max-width:860px;margin:0 auto;background:var(--paper);padding:0 0 54px;box-shadow:0 0 0 1px #c9c4b4}
+  .head{border-bottom:2px solid var(--green);padding:26px 30px 16px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+  h1{font-size:clamp(28px,5vw,40px);margin:0;letter-spacing:-.02em;font-weight:600}
+  .head .meta{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);text-align:right;line-height:1.7}
+  .ledger{margin:0 30px;border-left:2px solid var(--red)}
+  .row{display:grid;grid-template-columns:1fr 96px 96px;gap:0;border-bottom:1px solid var(--rule);padding:9px 0 9px 14px}
+  .row.h{color:var(--green);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid var(--green);padding-bottom:6px}
+  .row div:last-child,.row div:nth-child(2){text-align:right;font-variant-numeric:tabular-nums}
+  .row .dr{color:var(--ink)}
+  .row .cr{color:var(--green)}
+  .row.tot{border-bottom:3px double var(--green);font-weight:700;padding-top:10px}
+  .cols{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;margin:24px 30px 0}
+  @media (max-width:660px){.cols{grid-template-columns:1fr}.ledger,.cols{margin-left:18px;margin-right:18px}.head{padding-left:18px;padding-right:18px}}
+  h2{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin:0 0 6px}
+  p{line-height:1.72;margin:0 0 12px}
+  .go{display:inline-block;margin-top:6px;background:var(--ink);color:var(--paper);text-decoration:none;
+      padding:11px 18px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+  .go:hover{background:var(--green)}
+  .stamp{display:inline-block;border:1.5px solid var(--red);color:var(--red);padding:2px 8px;font-size:10px;
+         letter-spacing:.14em;text-transform:uppercase;transform:rotate(-1.5deg)}
+  .sponsor{margin:24px 30px 0;border-top:1px solid var(--rule);padding-top:12px;font-size:11.5px;color:#5b6a60}
+  .sponsor a{color:var(--green);text-decoration:none;border-bottom:1px solid currentColor}
+  .foot{margin:14px 30px 0;font-size:10.5px;color:#7b8880;line-height:1.8}
+  .foot a{color:var(--green)}
+</style></head>
+<body><div class="book">
+  <div class="head">
+    <h1>Ledger</h1>
+    <div class="meta">double entry · no bank sync<br>no accounts · no cloud</div>
   </div>
 
-  <h2>What it does</h2>
-  <ul>
-    <li>Posts proper double-entry transactions: debits equal credits, or nothing is saved.</li>
-    <li>Computes net worth as assets minus liabilities, from the ledger — never stored, always derived.</li>
-    <li>Reports a balance sheet and an income/expense statement, each checked against its own rows.</li>
-    <li>Keeps budgets and repeat rules, evaluated on device; a repeat is listed when due, never posted by itself.</li>
-    <li>Exports the whole ledger to a JSON file you own, and imports it back with identical totals.</li>
-  </ul>
+  <div class="ledger">
+    <div class="row h"><div>account</div><div>debit</div><div>credit</div></div>
+    <div class="row"><div class="dr">Food</div><div>1,000.00</div><div>—</div></div>
+    <div class="row"><div class="cr">Bank</div><div>—</div><div>1,000.00</div></div>
+    <div class="row tot"><div>total</div><div>1,000.00</div><div>1,000.00</div></div>
+  </div>
 
-  <h2>What it will not do</h2>
-  <ul>
-    <li><strong>Connect to a bank.</strong> There is no network code in the app at all — no <code>fetch</code>, no endpoint, CSP <code>connect-src 'none'</code>.</li>
-    <li><strong>Save a transaction that does not balance.</strong> Both totals are shown instead.</li>
-    <li><strong>Date an entry for you.</strong> No date is refused rather than dated today.</li>
-    <li><strong>Merge duplicates.</strong> Two identical entries are both kept and flagged — merging would be a lie about the money.</li>
-    <li><strong>Rebuild an unreadable ledger.</strong> A wrong balance is worse than no balance.</li>
-    <li><strong>Post a repeat by itself.</strong> A ledger that posts by itself is a ledger you cannot trust.</li>
-  </ul>
+  <div class="cols">
+    <div>
+      <h2>What it does</h2>
+      <p>Real double-entry bookkeeping, on your device. Every amount is an integer number of paise, because “reduces net worth by exactly ₹1,000” is a claim floating point cannot keep.</p>
+      <p>Net worth is never stored. It is derived from the transactions every time — a stored balance can disagree with the ledger; a derived one cannot.</p>
+    </div>
+    <div>
+      <h2>What it refuses</h2>
+      <p>A transaction that does not balance <span class="stamp">cannot be saved</span>. No bank connection, ever. Repeat rules are listed, never posted by themselves.</p>
+      <a class="go" href="play/index.html">open the book →</a>
+    </div>
+  </div>
 
-  <h2>When things go wrong</h2>
-  <table>
-    <tr><th>Case</th><th>What happens</th></tr>
-    <tr><td>Bad input</td><td>No amount, an unparseable amount, no date, an impossible date, a zero amount, an unknown account — each refused, with the value shown.</td></tr>
-    <tr><td>No network</td><td>Nothing changes, and that is the point: there are no bank connections, ever.</td></tr>
-    <tr><td>Storage full or unavailable</td><td>The entry is not saved and the app says the balance does not include it.</td></tr>
-    <tr><td>Corrupt saved state</td><td>Reported and offered for export; never rebuilt from a partial read.</td></tr>
-  </table>
+  <div class="sponsor">
+    <strong>Sponsor this app.</strong> It is free, offline and has no account. If it earned its keep:
+    <a href="https://github.com/sponsors/drsamonline">github.com/sponsors/drsamonline</a>
+  </div>
 
-  <h2>How to run it</h2>
-  <ul>
-    <li><strong>Here</strong>: <a href="play/index.html">play/index.html</a>, or install it from your browser's menu.</li>
-    <li><strong>Offline file</strong>: open <code>docs/play/index.html</code> straight from disk.</li>
-    <li><strong>Tests</strong>: <code>node tests/self-tests.js</code> — the spec's countable done-means is asserted there, to the paisa.</li>
-  </ul>
-
-  <footer>
-    PolyForm Noncommercial 1.0.0 · (c) 2026 Dr Sohil Momin ·
-    <a href="https://github.com/drsamonline/app-ledger">source</a>
-  </footer>
-</main>
-</body>
-</html>
+  <p class="foot">Receipt OCR is not built — entries are typed, and the page says so.<br>
+  Windows · Android · Linux at <a href="https://github.com/drsamonline/app-ledger/releases/tag/app-latest">app-latest</a> ·
+  PolyForm Noncommercial 1.0.0 · (c) 2026 Dr Sohil Momin</p>
+</div></body></html>

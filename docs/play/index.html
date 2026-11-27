@@ -47,6 +47,23 @@
   .neg{color:var(--bad)}
   footer{max-width:1000px;margin:0 auto;padding:18px 20px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
   [hidden]{display:none !important}
+
+  body{background:#e7e3d6;color:#1d2a24;font-family:ui-monospace,Menlo,Consolas,monospace}
+  header.top{background:#fbf9f3;border-bottom:2px solid #3d6b4f}
+  header.top h1{letter-spacing:-.01em}
+  header.top a{color:#3d6b4f}
+  main{background:#fbf9f3;max-width:900px}
+  .card{background:#fffdf7;border:1px solid #bcd3c2;border-radius:2px}
+  .card h2{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#a8443a}
+  .card p.claim{color:#5b6a60}
+  button{border-radius:2px;border-color:#bcd3c2;background:#fffdf7}
+  button.primary{background:#1d2a24;border-color:#1d2a24;color:#fbf9f3}
+  input[type=text]{background:#fffdf7;border-color:#bcd3c2;border-radius:2px;font-variant-numeric:tabular-nums}
+  ul.list li{background:#fffdf7;border-color:#bcd3c2;border-left-color:#3d6b4f;border-radius:2px}
+  .status.ok{border-color:#b6d3c0;background:#f2f8f3;color:#2c4f3a}
+  .status.bad{border-color:#d8bcae;background:#fbeee7;color:#8a4222}
+  .sponsor{margin:22px 0 0;border-top:1px solid #bcd3c2;padding-top:12px;font-size:11.5px;color:#5b6a60}
+  .sponsor a{color:#3d6b4f;text-decoration:none;border-bottom:1px solid currentColor}
 </style>
 </head>
 <body>
@@ -125,6 +142,10 @@
     <span class="hint" id="ioNote"></span>
   </div>
 
+  <div class="sponsor">
+    <strong>Sponsor this app.</strong> It is free, offline and has no account. If it earned its keep:
+    <a href="https://github.com/sponsors/drsamonline">github.com/sponsors/drsamonline</a>
+  </div>
   <footer>
     Ledger keeps everything on this device and never connects to a bank. There is no bank sync, no account, no cloud — and no network code at all.
     Reading a receipt photo is not built; entries are typed.
